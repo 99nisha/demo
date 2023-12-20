@@ -1,0 +1,78 @@
+---
+title: "analysis of air pollution"
+author: "me"
+date: "2023-12-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+install.packages("tidyverse")
+```
+```{r}
+install.packages("ggplot2")
+```
+```{r}
+library(ggplot2)
+```
+
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+air_data <- read.csv("../project/indoor_air_pollution (1).csv")
+head(air_data)
+
+```
+
+```{r}
+str(air_data)
+```
+```{r}
+glimpse(air_data)
+```
+
+```{r}
+death_means <- air_data %>% group_by(continent) %>%
+  summarise(avg_rate = mean(death_rate,na.rm = TRUE))
+
+ggplot(death_means,aes(x= continent,y = avg_rate)) +
+  geom_bar(stat = "identity",fill = "green")+ 
+  labs(title = "average death rate among continenents",
+       x ="continent",
+       y= "average rate") 
+```
+```{r}
+gdp_means <- air_data %>% group_by(continent) %>%
+  summarise(avg_gdp = mean(gdp,na.rm = TRUE))
+
+ggplot(gdp_means, aes(x= "",y= avg_gdp,fill = continent)) +
+  geom_bar(stat = "identity",width = 1) +
+  coord_polar(theta = "y") +
+  
+  
+  labs(title = "gdp value",
+       x ="continent",
+       y= "average gdp") 
+```
+
+```{r}
+selected1 <- air_data %>%
+filter(continent == "Asia") %>% 
+  select(country,gdp,continent)
+selected1
+```
+```{r}
+highest_airpolution_countries_in_asia <- selected1 %>% 
+  arrange(desc(gdp)) %>% 
+  head(5)
+print(highest_airpolution_countries_in_asia)
+```
+
